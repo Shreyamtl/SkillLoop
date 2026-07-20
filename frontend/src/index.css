@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: #FAFAF7;
+  color: #2B2B2B;
+  font-family: 'Inter', sans-serif;
+}
+
+.font-label {
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.03em;
+}
+
+/* stamp-style skill tag */
+.skill-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  border: 1px dashed #16213E;
+  border-radius: 2px;
+  padding: 0.2rem 0.55rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #FAFAF7;
+}
+
+.skill-tag--shared {
+  border-style: solid;
+  border-color: #E8A33D;
+  background: #FDF1DE;
+  color: #16213E;
+}
+
+.hairline {
+  border-bottom: 1px solid rgba(22, 33, 62, 0.12);
+}
+
+:focus-visible {
+  outline: 2px solid #E8A33D;
+  outline-offset: 2px;
+}
