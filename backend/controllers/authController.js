@@ -24,10 +24,19 @@ export const signup = async (req, res, next) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await User.create({ name, email, password: hashedPassword });
+    const user = await User.create({ name, email: email.toLowerCase(), password: hashedPassword });
 
     const token = generateToken(user._id);
-    res.status(201).json({ token, user });
+    res.status(201).json({
+      token,
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        skillsToTeach: user.skillsToTeach || [],
+        skillsToLearn: user.skillsToLearn || [],
+      }
+    });
   } catch (err) {
     next(err);
   }
@@ -52,7 +61,16 @@ export const login = async (req, res, next) => {
     }
 
     const token = generateToken(user._id);
-    res.json({ token, user });
+    res.json({
+      token,
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        skillsToTeach: user.skillsToTeach || [],
+        skillsToLearn: user.skillsToLearn || [],
+      }
+    });
   } catch (err) {
     next(err);
   }
