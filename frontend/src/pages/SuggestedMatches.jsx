@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import MatchCard from '../components/MatchCard';
 import { getSuggestedMatches, sendMatchRequest } from '../services/api';
+import toast from 'react-hot-toast';
 
 export default function SuggestedMatches() {
   const [matches, setMatches] = useState([]);
@@ -16,7 +17,12 @@ export default function SuggestedMatches() {
   }, []);
 
   const handleSendRequest = async (userId, skill, message) => {
-    await sendMatchRequest({ toUser: userId, skill, message });
+    try {
+      await sendMatchRequest({ toUser: userId, skill, message });
+      toast.success(`Request sent for ${skill}! 🎉`);
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Failed to send request');
+    }
   };
 
   return (
@@ -34,7 +40,7 @@ export default function SuggestedMatches() {
           <p className="text-sm text-ink/60">
             No matches yet. Add more skills to your profile, or check back once more students join.
           </p>
-          <Link to="/profile" className="text-sm text-ink underline mt-2 inline-block">
+          <Link to="/profile/edit" className="text-sm text-ink underline mt-2 inline-block">
             Update your profile
           </Link>
         </div>

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import TagInput from '../components/TagInput';
 import { getProfile, updateProfile } from '../services/api';
 import { useAuth } from '../context/AuthContext';
+import toast from 'react-hot-toast';
 
 export default function ProfileSetup() {
   const [skillsToTeach, setSkillsToTeach] = useState([]);
@@ -22,10 +23,15 @@ export default function ProfileSetup() {
   }, []);
 
   const handleSave = async () => {
-    const res = await updateProfile({ skillsToTeach, skillsToLearn });
-    setUser(res.data);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
+    try {
+      const res = await updateProfile({ skillsToTeach, skillsToLearn });
+      setUser(res.data);
+      setSaved(true);
+      toast.success('Profile updated successfully! ✨');
+      setTimeout(() => setSaved(false), 2000);
+    } catch (error) {
+      toast.error('Failed to update profile');
+    }
   };
 
   const handleContinue = async () => {

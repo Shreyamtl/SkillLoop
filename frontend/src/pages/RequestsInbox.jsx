@@ -1,16 +1,22 @@
 import { useState, useEffect } from 'react';
 import RequestCard from '../components/RequestCard';
 import { getMyRequests, acceptMatchRequest, declineMatchRequest } from '../services/api';
+import { useAuth } from '../context/AuthContext';
+import toast from 'react-hot-toast';
 
 export default function RequestsInbox() {
   const [tab, setTab] = useState('received');
   const [data, setData] = useState({ sent: [], received: [] });
   const [loading, setLoading] = useState(true);
+  const { refreshUser } = useAuth();
 
   const loadRequests = () => {
     setLoading(true);
     getMyRequests()
-      .then((res) => setData(res.data))
+      .then((res) => {
+        setData(res.data);
+      })
+      .catch(() => {})
       .finally(() => setLoading(false));
   };
 
@@ -19,13 +25,25 @@ export default function RequestsInbox() {
   }, []);
 
   const handleAccept = async (id) => {
-    await acceptMatchRequest(id);
-    loadRequests();
+    try {
+      await acceptMatchRequest(id);
+      await refreshUser();
+      loadRequests();
+      toast.success('Request accepted! 🎉');
+    } catch (error) {
+      toast.error('Failed to accept request');
+    }
   };
 
   const handleDecline = async (id) => {
-    await declineMatchRequest(id);
-    loadRequests();
+    try {
+      await declineMatchRequest(id);
+      await refreshUser();
+      loadRequests();
+      toast.success('Request declined');
+    } catch (error) {
+      toast.error('Failed to decline request');
+    }
   };
 
   const list = data[tab] || [];

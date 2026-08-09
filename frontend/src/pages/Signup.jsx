@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { signup } from '../services/api';
 import { useAuth } from '../context/AuthContext';
+import toast from 'react-hot-toast';
 
 export default function Signup() {
   const [form, setForm] = useState({ name: '', email: '', password: '' });
@@ -20,8 +21,10 @@ export default function Signup() {
     try {
       const res = await signup(form);
       loginUser(res.data.token, res.data.user);
+      toast.success('Account created! 🎉');
       navigate('/profile');
     } catch (err) {
+      toast.error(err.response?.data?.message || 'Signup failed');
       setError(err.response?.data?.message || 'Signup failed. Try again.');
     } finally {
       setLoading(false);

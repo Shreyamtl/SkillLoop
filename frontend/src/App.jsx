@@ -1,12 +1,14 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import { Toaster } from 'react-hot-toast';
 import Navbar from './components/Navbar';
+import Dashboard from './pages/Dashboard';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
+import Profile from './pages/Profile';
 import ProfileSetup from './pages/ProfileSetup';
 import SuggestedMatches from './pages/SuggestedMatches';
 import RequestsInbox from './pages/RequestsInbox';
-import Dashboard from './pages/Dashboard';
-import { useAuth } from './context/AuthContext';
 
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
@@ -18,6 +20,30 @@ function ProtectedRoute({ children }) {
 export default function App() {
   return (
     <div className="min-h-screen bg-paper">
+      <Toaster 
+        position="top-right"
+        toastOptions={{
+          duration: 3000,
+          style: {
+            background: '#363636',
+            color: '#fff',
+          },
+          success: {
+            duration: 3000,
+            iconTheme: {
+              primary: '#4ade80',
+              secondary: '#fff',
+            },
+          },
+          error: {
+            duration: 4000,
+            iconTheme: {
+              primary: '#ef4444',
+              secondary: '#fff',
+            },
+          },
+        }}
+      />
       <Navbar />
       <Routes>
         <Route path="/signup" element={<Signup />} />
@@ -32,6 +58,14 @@ export default function App() {
         />
         <Route
           path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile/edit"
           element={
             <ProtectedRoute>
               <ProfileSetup />
