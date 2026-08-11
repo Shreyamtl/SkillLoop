@@ -9,6 +9,7 @@ import Profile from './pages/Profile';
 import ProfileSetup from './pages/ProfileSetup';
 import SuggestedMatches from './pages/SuggestedMatches';
 import RequestsInbox from './pages/RequestsInbox';
+import Chat from './pages/Chat';
 
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
@@ -85,6 +86,14 @@ export default function App() {
           element={
             <ProtectedRoute>
               <RequestsInbox />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/chat"
+          element={
+            <ProtectedRoute>
+              <Chat />
             </ProtectedRoute>
           }
         />
