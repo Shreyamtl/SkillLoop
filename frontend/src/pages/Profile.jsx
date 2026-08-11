@@ -7,9 +7,8 @@ export default function Profile() {
   return (
     <div className="max-w-2xl mx-auto px-6 py-12">
       <div className="bg-white rounded-2xl shadow-xl p-8">
-        {/* Header */}
         <div className="flex items-center gap-6 border-b pb-6 mb-6">
-          <div className="w-20 h-20 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 flex items-center justify-center text-white text-3xl font-bold">
+          <div className="w-20 h-20 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 flex items-center justify-center text-white text-3xl font-bold">
             {user?.name?.[0] || 'U'}
           </div>
           <div>
@@ -18,16 +17,15 @@ export default function Profile() {
           </div>
         </div>
 
-        {/* Skills Sections */}
         <div className="space-y-6">
           <div>
             <h2 className="text-lg font-semibold text-gray-700 flex items-center gap-2">
-              📚 Skills I Can Teach
+              Skills I Can Teach
             </h2>
             <div className="flex flex-wrap gap-2 mt-2">
               {user?.skillsToTeach?.length > 0 ? (
                 user.skillsToTeach.map((skill) => (
-                  <span key={skill} className="bg-purple-100 text-purple-700 px-4 py-2 rounded-full text-sm font-medium">
+                  <span key={skill} className="bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full text-sm font-medium">
                     {skill}
                   </span>
                 ))
@@ -39,7 +37,7 @@ export default function Profile() {
 
           <div>
             <h2 className="text-lg font-semibold text-gray-700 flex items-center gap-2">
-              🎯 Skills I Want to Learn
+              Skills I Want to Learn
             </h2>
             <div className="flex flex-wrap gap-2 mt-2">
               {user?.skillsToLearn?.length > 0 ? (
@@ -55,13 +53,12 @@ export default function Profile() {
           </div>
         </div>
 
-        {/* Edit Button */}
         <div className="mt-8 pt-6 border-t">
           <Link
             to="/profile/edit"
-            className="inline-block bg-gradient-to-r from-purple-500 to-blue-500 text-white px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition"
+            className="inline-block bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-3 rounded-xl font-semibold hover:opacity-90 transition"
           >
-            ✏️ Edit Profile
+            Edit Profile
           </Link>
         </div>
       </div>

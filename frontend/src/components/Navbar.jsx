@@ -20,30 +20,30 @@ export default function Navbar() {
   }, [user]);
 
   const navLinks = [
-    { to: '/matches', label: '🎯 Matches' },
-    { to: '/requests', label: `📨 Requests${pendingCount > 0 ? ` (${pendingCount})` : ''}` },
-    { to: '/chat', label: '💬 Chat' },
-    { to: '/profile', label: '👤 Profile' },
+    { to: '/matches', label: 'Matches' },
+    { to: '/requests', label: `Requests${pendingCount > 0 ? ` (${pendingCount})` : ''}` },
+    { to: '/chat', label: 'Chat' },
+    { to: '/profile', label: 'Profile' },
   ];
 
   return (
-    <nav className="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-50">
+    <nav className="bg-white/80 backdrop-blur-md border-b border-[#1a1a2e]/5 sticky top-0 z-50">
       <div className="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
-        <Link to="/" className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent">
+        <Link to="/" className="text-2xl font-serif font-bold text-[#1a1a2e] tracking-tight">
           SkillSwap
         </Link>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1">
           {user ? (
             <>
               {navLinks.map((link) => (
                 <Link
                   key={link.to}
                   to={link.to}
-                  className={`px-4 py-2 rounded-xl text-sm font-medium transition ${
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition ${
                     location.pathname === link.to
-                      ? 'bg-purple-100 text-purple-700'
-                      : 'text-gray-600 hover:bg-gray-100'
+                      ? 'bg-[#1a1a2e]/10 text-[#1a1a2e]'
+                      : 'text-[#4a4440] hover:bg-[#f5f0eb]'
                   }`}
                 >
                   {link.label}
@@ -51,17 +51,17 @@ export default function Navbar() {
               ))}
               <button
                 onClick={logoutUser}
-                className="ml-2 text-sm text-gray-500 hover:text-red-500 transition px-3 py-2"
+                className="ml-2 text-sm text-[#4a4440]/60 hover:text-[#1a1a2e] transition px-3 py-2"
               >
                 Logout
               </button>
             </>
           ) : (
             <div className="flex gap-2">
-              <Link to="/login" className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-purple-600">
+              <Link to="/login" className="px-4 py-2 text-sm font-medium text-[#4a4440] hover:text-[#1a1a2e]">
                 Login
               </Link>
-              <Link to="/signup" className="px-4 py-2 text-sm font-medium bg-gradient-to-r from-purple-600 to-blue-500 text-white rounded-xl hover:opacity-90">
+              <Link to="/signup" className="px-4 py-2 text-sm font-medium bg-[#1a1a2e] text-white rounded-full hover:bg-[#2d2a44] transition shadow-md hover:shadow-lg">
                 Sign Up
               </Link>
             </div>
