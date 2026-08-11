@@ -1,23 +1,30 @@
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+
 const statusColor = {
   pending: 'text-amber border-amber bg-amber/10',
   accepted: 'text-sage border-sage bg-sage/10',
   declined: 'text-rust border-rust bg-rust/10',
 };
 
-/**
- * Props:
- *  - request: { _id, skill, message, status, fromUser, toUser, contactEmail }
- *  - direction: 'sent' | 'received'
- *  - onAccept, onDecline: (id) => void   (only used when direction === 'received')
- */
 export default function RequestCard({ request, direction, onAccept, onDecline }) {
   const otherParty = direction === 'sent' ? request.toUser : request.fromUser;
+  const [showRatingModal, setShowRatingModal] = useState(false);
+  const [isRated, setIsRated] = useState(false);
+
+  const handleRated = () => {
+    setIsRated(true);
+  };
 
   return (
     <div className="hairline pb-5 mb-5">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="font-semibold text-ink">{otherParty?.name}</p>
+          <p className="font-semibold text-ink">
+            <Link to={`/profile/${otherParty?._id}`} className="hover:text-indigo-600 transition">
+              {otherParty?.name}
+            </Link>
+          </p>
           <p className="text-sm text-ink/70 mt-0.5">
             skill: <span className="skill-tag ml-1">{request.skill}</span>
           </p>
@@ -53,6 +60,19 @@ export default function RequestCard({ request, direction, onAccept, onDecline })
             decline
           </button>
         </div>
+      )}
+
+      {request.status === 'accepted' && direction === 'received' && !isRated && (
+        <button
+          onClick={() => setShowRatingModal(true)}
+          className="mt-3 text-xs text-purple-600 hover:text-purple-800 transition font-medium"
+        >
+          Rate this match
+        </button>
+      )}
+
+      {request.status === 'accepted' && direction === 'received' && isRated && (
+        <p className="mt-3 text-xs text-green-600">You rated this match</p>
       )}
     </div>
   );

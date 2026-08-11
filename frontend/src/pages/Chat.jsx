@@ -24,7 +24,6 @@ export default function Chat() {
         const matchedUsers = [];
         const seenUserIds = new Set();
 
-        // Process received requests (where user is the receiver)
         acceptedReceived.forEach(r => {
           const userId = r.fromUser._id;
           if (!seenUserIds.has(userId)) {
@@ -38,7 +37,6 @@ export default function Chat() {
           }
         });
 
-        // Process sent requests (where user is the sender)
         acceptedSent.forEach(r => {
           const userId = r.toUser._id;
           if (!seenUserIds.has(userId)) {
@@ -63,7 +61,6 @@ export default function Chat() {
       socket.emit('register', user._id);
     }
 
-    // Cleanup on unmount
     return () => {
       socket.off('receive-message');
     };
@@ -83,10 +80,8 @@ export default function Chat() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  // Listen for incoming messages
   useEffect(() => {
     const handleReceiveMessage = (data) => {
-      // Don't add message if it was sent by the current user (prevents duplicates)
       if (data.fromUser._id === user?._id || data.fromUser === user?._id) {
         return;
       }
@@ -97,7 +92,6 @@ export default function Chat() {
         
         if (roomId === currentRoomId) {
           setMessages(prev => {
-            // Check if message already exists (prevent duplicates)
             const exists = prev.some(m => 
               m.message === data.message && 
               m.timestamp === data.timestamp
@@ -137,10 +131,8 @@ export default function Chat() {
       timestamp: new Date().toISOString(),
     };
 
-    // Emit message to server
     socket.emit('send-message', messageData);
 
-    // Add message locally for immediate display
     const newMsg = {
       ...messageData,
       fromUser: { _id: user._id, name: user.name },
@@ -159,7 +151,7 @@ export default function Chat() {
 
   return (
     <div className="max-w-4xl mx-auto px-6 py-16">
-      <h1 className="text-2xl font-bold mb-1">💬 Messages</h1>
+      <h1 className="text-2xl font-bold mb-1">Messages</h1>
       <p className="text-sm text-gray-500 mb-8">Chat with your skill exchange partners.</p>
 
       {matches.length === 0 && (
@@ -169,16 +161,15 @@ export default function Chat() {
       )}
 
       <div className="grid md:grid-cols-3 gap-6">
-        {/* Matches List */}
         <div className="md:col-span-1 border rounded-xl p-4 space-y-2 max-h-[500px] overflow-y-auto">
-          <h3 className="font-bold text-sm text-gray-500 mb-4">YOUR MATCHES</h3>
+          <h3 className="font-bold text-sm text-gray-500 mb-4">Your Matches</h3>
           {matches.map((match, index) => (
             <button
               key={index}
               onClick={() => setSelectedMatch(match)}
               className={`w-full text-left p-3 rounded-xl transition ${
                 selectedMatch?.userId === match.userId
-                  ? 'bg-purple-100 border-purple-300 border'
+                  ? 'bg-indigo-100 border-indigo-300 border'
                   : 'hover:bg-gray-50'
               }`}
             >
@@ -188,12 +179,11 @@ export default function Chat() {
           ))}
         </div>
 
-        {/* Chat Area */}
         <div className="md:col-span-2 border rounded-xl p-4 h-[500px] flex flex-col">
           {selectedMatch ? (
             <>
               <div className="border-b pb-3 mb-3 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 flex items-center justify-center text-white font-bold">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 flex items-center justify-center text-white font-bold">
                   {selectedMatch.name?.[0] || 'U'}
                 </div>
                 <div>
@@ -204,7 +194,7 @@ export default function Chat() {
 
               <div className="flex-1 overflow-y-auto space-y-2 mb-4">
                 {messages.length === 0 && (
-                  <p className="text-gray-400 text-sm text-center py-8">No messages yet. Say hello! 👋</p>
+                  <p className="text-gray-400 text-sm text-center py-8">No messages yet. Say hello!</p>
                 )}
                 {messages.map((msg, idx) => {
                   const isOwn = msg.fromUser?._id === user?._id || msg.fromUser === user?._id;
@@ -213,12 +203,12 @@ export default function Chat() {
                       key={idx}
                       className={`max-w-[70%] p-3 rounded-xl ${
                         isOwn
-                          ? 'ml-auto bg-purple-500 text-white'
+                          ? 'ml-auto bg-indigo-600 text-white'
                           : 'bg-gray-100'
                       }`}
                     >
                       <p className="text-sm break-words">{msg.message}</p>
-                      <p className={`text-[10px] mt-1 ${isOwn ? 'text-purple-200' : 'text-gray-400'}`}>
+                      <p className={`text-[10px] mt-1 ${isOwn ? 'text-indigo-200' : 'text-gray-400'}`}>
                         {msg.timestamp ? new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Just now'}
                       </p>
                     </div>
@@ -233,11 +223,11 @@ export default function Chat() {
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
                   placeholder="Type a message..."
-                  className="flex-1 border rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-purple-500"
+                  className="flex-1 border rounded-xl px-4 py-2 text-sm focus:outline-none focus:border-indigo-500"
                 />
                 <button
                   type="submit"
-                  className="bg-purple-500 text-white px-6 py-2 rounded-xl hover:bg-purple-600 transition"
+                  className="bg-indigo-600 text-white px-6 py-2 rounded-xl hover:bg-indigo-700 transition"
                 >
                   Send
                 </button>
@@ -245,7 +235,7 @@ export default function Chat() {
             </>
           ) : (
             <div className="flex-1 flex items-center justify-center text-gray-400">
-              <p>Select a match to start chatting 💬</p>
+              <p>Select a match to start chatting</p>
             </div>
           )}
         </div>

@@ -26,10 +26,6 @@ export const sendMatchRequest = async (req, res, next) => {
       return res.status(400).json({ message: 'This user cannot teach the requested skill' });
     }
     
-    if (!req.user.skillsToLearn.includes(skill)) {
-      return res.status(400).json({ message: 'You are not looking to learn this skill' });
-    }
-    
     const existingRequest = await MatchRequest.findOne({
       fromUser: req.user._id,
       toUser,

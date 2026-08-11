@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { Toaster } from 'react-hot-toast';
 import Navbar from './components/Navbar';
-import Dashboard from './pages/Dashboard';
+import Homepage from './pages/Homepage';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
 import Profile from './pages/Profile';
@@ -10,6 +10,7 @@ import ProfileSetup from './pages/ProfileSetup';
 import SuggestedMatches from './pages/SuggestedMatches';
 import RequestsInbox from './pages/RequestsInbox';
 import Chat from './pages/Chat';
+import PublicProfile from './pages/PublicProfile';
 
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
@@ -53,7 +54,7 @@ export default function App() {
           path="/"
           element={
             <ProtectedRoute>
-              <Dashboard />
+              <Homepage />
             </ProtectedRoute>
           }
         />
@@ -70,6 +71,14 @@ export default function App() {
           element={
             <ProtectedRoute>
               <ProfileSetup />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile/:userId"
+          element={
+            <ProtectedRoute>
+              <PublicProfile />
             </ProtectedRoute>
           }
         />

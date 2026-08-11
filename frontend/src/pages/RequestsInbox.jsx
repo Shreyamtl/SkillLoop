@@ -27,9 +27,9 @@ export default function RequestsInbox() {
   const handleAccept = async (id) => {
     try {
       await acceptMatchRequest(id);
-      await refreshUser();
+      if (refreshUser) await refreshUser();
       loadRequests();
-      toast.success('Request accepted! 🎉');
+      toast.success('Request accepted!');
     } catch (error) {
       toast.error('Failed to accept request');
     }
@@ -38,7 +38,7 @@ export default function RequestsInbox() {
   const handleDecline = async (id) => {
     try {
       await declineMatchRequest(id);
-      await refreshUser();
+      if (refreshUser) await refreshUser();
       loadRequests();
       toast.success('Request declined');
     } catch (error) {
@@ -50,7 +50,7 @@ export default function RequestsInbox() {
 
   return (
     <div className="max-w-2xl mx-auto px-6 py-16">
-      <h1 className="font-label text-xl text-ink mb-1">requests</h1>
+      <h1 className="font-label text-xl text-ink mb-1">Requests</h1>
       <p className="text-sm text-ink/60 mb-8">Track requests you've sent and received.</p>
 
       <div className="flex gap-2 mb-8 font-label text-xs">
@@ -60,7 +60,7 @@ export default function RequestsInbox() {
             tab === 'received' ? 'bg-ink text-paper border-ink' : 'border-ink/30 text-ink/60'
           }`}
         >
-          received {data.received?.length ? `(${data.received.length})` : ''}
+          Received {data.received?.length ? `(${data.received.length})` : ''}
         </button>
         <button
           onClick={() => setTab('sent')}
@@ -68,7 +68,7 @@ export default function RequestsInbox() {
             tab === 'sent' ? 'bg-ink text-paper border-ink' : 'border-ink/30 text-ink/60'
           }`}
         >
-          sent {data.sent?.length ? `(${data.sent.length})` : ''}
+          Sent {data.sent?.length ? `(${data.sent.length})` : ''}
         </button>
       </div>
 
