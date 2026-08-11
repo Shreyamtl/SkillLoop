@@ -1,53 +1,72 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useState, useEffect } from 'react';
+import { getMyRequests } from '../services/api';
 
 export default function Navbar() {
   const { user, logoutUser } = useAuth();
-  const navigate = useNavigate();
+  const location = useLocation();
+  const [pendingCount, setPendingCount] = useState(0);
 
-  const handleLogout = () => {
-    logoutUser();
-    navigate('/login');
-  };
+  useEffect(() => {
+    if (user) {
+      getMyRequests()
+        .then((res) => {
+          const pending = res.data.received.filter(r => r.status === 'pending').length;
+          setPendingCount(pending);
+        })
+        .catch(() => {});
+    }
+  }, [user]);
+
+  const navLinks = [
+    { to: '/matches', label: '🎯 Matches' },
+    { to: '/requests', label: `📨 Requests${pendingCount > 0 ? ` (${pendingCount})` : ''}` },
+    { to: '/chat', label: '💬 Chat' },
+    { to: '/profile', label: '👤 Profile' },
+  ];
 
   return (
-    <nav className="hairline bg-paper sticky top-0 z-10">
-      <div className="max-w-5xl mx-auto flex items-center justify-between px-6 py-4">
-        <Link to="/" className="font-label text-lg tracking-tight text-ink">
-          SkillSwap<span className="text-amber">.</span>
+    <nav className="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-50">
+      <div className="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
+        <Link to="/" className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent">
+          SkillSwap
         </Link>
 
-        {user ? (
-          <div className="flex items-center gap-6 font-label text-sm">
-            <Link to="/matches" className="hover:text-amber transition-colors">
-              matches
-            </Link>
-            <Link to="/requests" className="hover:text-amber transition-colors">
-              requests
-            </Link>
-            <Link to="/profile" className="hover:text-amber transition-colors">
-              profile
-            </Link>
-            <button
-              onClick={handleLogout}
-              className="border border-ink px-3 py-1 rounded-sm hover:bg-ink hover:text-paper transition-colors"
-            >
-              log out
-            </button>
-          </div>
-        ) : (
-          <div className="flex items-center gap-4 font-label text-sm">
-            <Link to="/login" className="hover:text-amber transition-colors">
-              log in
-            </Link>
-            <Link
-              to="/signup"
-              className="border border-ink px-3 py-1 rounded-sm hover:bg-ink hover:text-paper transition-colors"
-            >
-              sign up
-            </Link>
-          </div>
-        )}
+        <div className="flex items-center gap-2">
+          {user ? (
+            <>
+              {navLinks.map((link) => (
+                <Link
+                  key={link.to}
+                  to={link.to}
+                  className={`px-4 py-2 rounded-xl text-sm font-medium transition ${
+                    location.pathname === link.to
+                      ? 'bg-purple-100 text-purple-700'
+                      : 'text-gray-600 hover:bg-gray-100'
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              ))}
+              <button
+                onClick={logoutUser}
+                className="ml-2 text-sm text-gray-500 hover:text-red-500 transition px-3 py-2"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <div className="flex gap-2">
+              <Link to="/login" className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-purple-600">
+                Login
+              </Link>
+              <Link to="/signup" className="px-4 py-2 text-sm font-medium bg-gradient-to-r from-purple-600 to-blue-500 text-white rounded-xl hover:opacity-90">
+                Sign Up
+              </Link>
+            </div>
+          )}
+        </div>
       </div>
     </nav>
   );

@@ -31,3 +31,13 @@ export const updateProfile = async (req, res, next) => {
     next(err);
   }
 };
+
+export const getAllUsers = async (req, res, next) => {
+  try {
+    const users = await User.find({ _id: { $ne: req.user._id } })
+      .select('name email skillsToTeach skillsToLearn');
+    res.json(users);
+  } catch (err) {
+    next(err);
+  }
+};
