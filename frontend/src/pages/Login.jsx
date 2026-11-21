@@ -21,7 +21,7 @@ export default function Login() {
     try {
       const res = await login(form);
       loginUser(res.data.token, res.data.user);
-      toast.success('Welcome back! 👋');
+      toast.success('Welcome back!');
       navigate('/matches');
     } catch (err) {
       toast.error(err.response?.data?.message || 'Login failed');
