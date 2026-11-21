@@ -4,7 +4,7 @@ import { getMyRequests } from '../services/api';
 import { io } from 'socket.io-client';
 import toast from 'react-hot-toast';
 
-const socket = io('http://localhost:5000');
+const socket = io(import.meta.env.VITE_SOCKET_URL || 'http://localhost:5000');
 
 export default function Chat() {
   const { user } = useAuth();
